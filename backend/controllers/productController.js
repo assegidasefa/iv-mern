@@ -1,15 +1,16 @@
-const Product = require('../models/Product');
+import Product from '../models/Product.js';
+import { getProduct } from '../service/productService.js';
 
-const getProducts = async (req, res) => {
+export const getProducts = async (req, res) => {
   try {
-    const products = await Product.find({});
+    const products = await getProduct();
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: 'Server Error' });
   }
 };
 
-const addProduct = async (req, res) => {
+export const addProduct = async (req, res) => {
     const { name, price, description, countInStock } = req.body;
     const image = req.file.path;
   
@@ -29,7 +30,7 @@ const addProduct = async (req, res) => {
     }
   };
 
-module.exports = {
-  getProducts,
-  addProduct
-};
+// module.exports = {
+//   getProducts,
+//   addProduct
+// };

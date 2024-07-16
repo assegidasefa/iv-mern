@@ -1,7 +1,11 @@
 import React from "react";
 import { Button, Checkbox, Form, Input } from 'antd';
+import { login } from "../service/userService";
 const onFinish = (values) => {
   console.log('Success:', values);
+  login(values).then((res)=>{
+    console.log("response",res)
+  })
 };
 const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
@@ -30,12 +34,12 @@ const LoginScreen = () => {
           autoComplete="off"
         >
           <Form.Item
-            label="Username"
-            name="username"
+            label="Email"
+            name="email"
             rules={[
               {
                 required: true,
-                message: "Please input your username!",
+                message: "Please input your email!",
               },
             ]}
           >

@@ -1,8 +1,9 @@
-const express = require('express');
-const connectDB = require('./config/db');
-const dotenv = require('dotenv');
-const cors = require('cors');  // Import cors
-const productRoutes = require('./routes/productRoutes');
+import express from 'express';
+import connectDB from './config/db.js';
+import dotenv from "dotenv"
+import cors from "cors"
+import routes from "./routes/index.js"
+
 
 dotenv.config();
 connectDB();
@@ -12,7 +13,7 @@ app.use(cors());  // Enable CORS
 
 app.use(express.json());
 
-app.use('/api/products', productRoutes);
+app.use('/api', routes);
 
 const PORT = process.env.PORT || 5000;
 
