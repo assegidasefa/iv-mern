@@ -123,7 +123,7 @@ const login_user = async (body) => {
 };
 
 const signToken = async (email, ) => {
-  const _keyDir = __dirname + "/src/controllers/jwtRS256.key";
+  const _keyDir = __dirname + "/controllers/jwtRS256.key";
   const privateKey = fs.readFileSync(_keyDir);
   const token = jwt.sign({  email  }, privateKey, {
     algorithm: "RS256",

@@ -4,9 +4,9 @@ import { getProduct } from '../service/productService.js';
 export const getProducts = async (req, res) => {
   try {
     const products = await getProduct();
-    res.json(products);
+    res.json({products:products,success:true});
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({success:false, message: 'Server Error' });
   }
 };
 

@@ -1,28 +1,44 @@
-import React from "react";
-import { Button, Checkbox, Form, Input } from 'antd';
+import React, { useState } from "react";
+import { Alert, Button, Checkbox, Form, Input } from "antd";
 import { login } from "../service/userService";
-const onFinish = (values) => {
-  console.log('Success:', values);
-  login(values).then((res)=>{
-    console.log("response",res)
-  })
-};
-const onFinishFailed = (errorInfo) => {
-  console.log('Failed:', errorInfo);
-};
+import { useNavigate } from "react-router-dom";
 
 const LoginScreen = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+
+  const onFinish = (values) => {
+    console.log("Success:", values);
+    login(values).then((res) => {
+      console.log("response", res);
+      const success = res?.data?.success;
+      console.log("enter here", success);
+      if (success) {
+        localStorage.setItem("user", JSON.stringify(res.data));
+        setError("");
+        navigate("/");
+      } else {
+        setError(res?.data?.error);
+      }
+    });
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
   return (
     <div className="flex min-h-screen bg-red-500 mt-2 mx-10">
       <div className="w-1/2 flex flex-col justify-center items-center">
+        {error && <Alert message={error} type="error" />}
+
         <Form
           name="basic"
-        //   labelCol={{
-        //     span: 8,
-        //   }}
-        //   wrapperCol={{
-        //     span: 16,
-        //   }}
+          //   labelCol={{
+          //     span: 8,
+          //   }}
+          //   wrapperCol={{
+          //     span: 16,
+          //   }}
           style={{
             maxWidth: 600,
           }}

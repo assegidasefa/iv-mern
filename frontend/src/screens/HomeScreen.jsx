@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
-import axios from "../axios";
 import ProductList from "../components/ProductList";
-import Navbar from "../components/Navbar";
+import { getProducts } from "../service/productService";
 
 const HomeScreen = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const { data } = await axios.get("/products");
-      console.log("res", data);
-      setProducts(data);
+      getProducts().then((res)=>{
+        console.log("res",res)
+        const success = res?.data?.success
+        if(success){
+          setProducts(res?.data?.products);
+        }else{
+
+        }
+      })
     };
 
     fetchProducts();
