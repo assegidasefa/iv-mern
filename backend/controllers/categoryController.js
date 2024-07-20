@@ -1,5 +1,5 @@
 import validator from "validator";
-import { createCategory, getCategoryByName } from "../service/categoryService.js";
+import { createCategory, getAllCategory, getCategoryByName } from "../service/categoryService.js";
 
 
 export const createNewCategory = (req, res) => {
@@ -13,6 +13,24 @@ export const createNewCategory = (req, res) => {
       });
   };
 
+
+
+export const getCategory = (req,res)=>{
+   getCategoryHandler().then((resp)=>{
+      res.status(200).send(resp)
+  }).catch((err)=>{
+    res.status(200).send({success:false,error:"Something went wrong"})
+  })
+}  
+
+
+const getCategoryHandler = async () => {
+  const category = await getAllCategory()
+  return {
+    category,
+    success:true
+  }
+}
 
   const addCategory = async (body) => {
     if (

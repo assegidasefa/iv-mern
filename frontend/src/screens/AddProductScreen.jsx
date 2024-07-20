@@ -1,37 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "../axios";
 import Sidebar from "../components/Sidebar";
 import { HomeOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Select, Input, Row, Col } from "antd";
 import { Breadcrumb } from "antd";
+import { getAllSupplier } from "../service/supplierService";
+import { getAllCategory } from "../service/categoryService";
+
+const { Option } = Select;
 
 const AddProductScreen = () => {
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
-  const [countInStock, setCountInStock] = useState("");
-  const [image, setImage] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("price", price);
-    formData.append("description", description);
-    formData.append("countInStock", countInStock);
-    formData.append("image", image);
-
-    try {
-      await axios.post("/products", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      alert("Product added successfully!");
-    } catch (error) {
-      console.error("There was an error uploading the product!", error);
-    }
-  };
+  useEffect(() => {
+    getAllSupplier().then((res) => {
+      console.log("resp supplier", res);
+      const success = res?.data;
+      if (success) {
+        setSuppliers(res?.data?.supplier);
+      }
+    });
+    getAllCategory().then((res) => {
+      console.log("resp category", res);
+      const success = res?.data;
+      if (success) {
+        setCategories(res?.data?.category);
+      }
+    });
+  }, []);
 
   const onFinish = (values) => {
     console.log("Success:", values);
@@ -55,7 +52,7 @@ const AddProductScreen = () => {
               // href: "",
               title: (
                 <div className="flex  hover:text-gray-600 gap-1">
-                  <UserOutlined />
+                  {/* <UserOutlined /> */}
                   <span>Product</span>
                 </div>
               ),
@@ -65,7 +62,7 @@ const AddProductScreen = () => {
             },
           ]}
         />
-        <div className="self-center w-1/2 border border-t-4 p-10 max-h-min rounded-md">
+        <div className="self-center w-3/4 border border-t-4 p-10 max-h-min rounded-md">
           <h1 className="text-2xl font-bold mb-2">Add Product</h1>
           <Form
             name="basic"
@@ -75,64 +72,109 @@ const AddProductScreen = () => {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
-            <Form.Item
-              label="Name"
-              name="name"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your name!",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Description"
-              name="description"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your description!",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Price"
-              name="price"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your price!",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Quantity"
-              name="quantity"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your quantity!",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              wrapperCol={{
-                offset: 8,
-                span: 16,
-              }}
-            >
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  label="Name"
+                  name="name"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your name!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  label="Description"
+                  name="description"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your description!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  label="Price"
+                  name="price"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your price!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  label="Quantity"
+                  name="quantity"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your quantity!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  label="Category"
+                  name="categoryID"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select a category!",
+                    },
+                  ]}
+                >
+                  <Select placeholder="Select a category">
+                    {categories?.map((category) => (
+                      <Option key={category._id} value={category._id}>
+                        {category?.name}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  label="Supplier"
+                  name="supplierID"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select a supplier!",
+                    },
+                  ]}
+                >
+                  <Select placeholder="Select a supplier">
+                    {suppliers?.map((supplier) => (
+                      <Option key={supplier._id} value={supplier._id}>
+                        {supplier?.supplierName}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+            <Form.Item>
               <Button type="primary" htmlType="submit">
                 Submit
               </Button>

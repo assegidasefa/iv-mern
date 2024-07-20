@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axios from "../axios";
 import Sidebar from "../components/Sidebar";
-import { HomeOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Modal, Table } from "antd";
+import { HomeOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Modal, Table } from "antd";
 import { Breadcrumb } from "antd";
+import { addCategory } from "../service/categoryService";
 
 const CategoryListScreen = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,16 +45,20 @@ const CategoryListScreen = () => {
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const handleOk = () => {
+
+  const handleOk = (values) => {
+    console.log("Form values:", values);
+    addCategory(values).then((res)=>{
+      console.log("response",res)
+    })
     setIsModalOpen(false);
+    // You can also add your form submission logic here, e.g., sending data to an API
   };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -66,20 +71,17 @@ const CategoryListScreen = () => {
         <Breadcrumb
           items={[
             {
-              // href: "",
               title: <HomeOutlined />,
             },
             {
-              // href: "",
               title: (
-                <div className="flex  hover:text-gray-600">
-                  <UserOutlined />
-                  <span>Product</span>
+                <div className="flex hover:text-gray-600 justify-center items-center gap-1">
+                  <span>Category</span>
                 </div>
               ),
             },
             {
-              title: "Add product",
+              title: "Add Category",
             },
           ]}
         />
@@ -89,24 +91,19 @@ const CategoryListScreen = () => {
               Add Category
             </Button>
           </div>
-          <div className="w-full flex justify-center bg-red-400  ">
+          <div className="w-full flex justify-center bg-red-400">
             <Table
               dataSource={dataSource}
               columns={columns}
-              className=" w-3/4  mt-5"
+              className="w-3/4 mt-5"
             />
           </div>
         </div>
         {isModalOpen && (
-          <Modal
-            title="Add Category"
-            open={isModalOpen}
-            onOk={handleOk}
-            onCancel={handleCancel}
-          >
+          <Modal title="Add Category" open={isModalOpen} onCancel={handleCancel} footer={null}>
             <Form
               name="basic"
-              onFinish={onFinish}
+              onFinish={handleOk}
               layout="vertical"
               className="w-full"
               onFinishFailed={onFinishFailed}
@@ -136,6 +133,12 @@ const CategoryListScreen = () => {
                 ]}
               >
                 <Input />
+              </Form.Item>
+
+              <Form.Item className="flex justify-end">
+                <Button type="primary" htmlType="submit">
+                  Add Category
+                </Button>
               </Form.Item>
             </Form>
           </Modal>
