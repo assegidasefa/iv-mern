@@ -2,7 +2,18 @@ import React, { useEffect, useState } from "react";
 import axios from "../axios";
 import Sidebar from "../components/Sidebar";
 import { HomeOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Select, Input, Row, Col } from "antd";
+import { FaCloudUploadAlt } from "react-icons/fa";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Select,
+  Input,
+  Row,
+  Col,
+  Upload,
+  message,
+} from "antd";
 import { Breadcrumb } from "antd";
 import { getAllSupplier } from "../service/supplierService";
 import { getAllCategory } from "../service/categoryService";
@@ -12,6 +23,24 @@ const { Option } = Select;
 const AddProductScreen = () => {
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
+
+  const props = {
+    name: "file",
+    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+    headers: {
+      authorization: "authorization-text",
+    },
+    onChange(info) {
+      if (info.file.status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === "done") {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
 
   useEffect(() => {
     getAllSupplier().then((res) => {
@@ -174,6 +203,23 @@ const AddProductScreen = () => {
                 </Form.Item>
               </Col>
             </Row>
+
+            <Form.Item
+              label="Image"
+              name="image"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select a image!",
+                },
+              ]}
+            >
+              <Upload {...props}>
+                <Button className="flex justify-center items-center">
+                  <FaCloudUploadAlt/> Click to Upload
+                </Button>
+              </Upload>
+            </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Submit
