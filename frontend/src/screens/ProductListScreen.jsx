@@ -2,24 +2,18 @@ import React, { useEffect, useState } from "react";
 import axios from "../axios";
 import Sidebar from "../components/Sidebar";
 import { HomeOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Modal, Table, Tooltip } from "antd";
+import { Button, Form, Input, Modal, Table } from "antd";
 import { Breadcrumb } from "antd";
 import { addCategory, getAllCategory } from "../service/categoryService";
+import { getProducts } from "../service/productService";
+import { getAllSupplier } from "../service/supplierService";
 import moment from "moment";
 
-const CategoryListScreen = () => {
+const ProductListScreen = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [categories,setCategories]  = useState([])
-
-  useEffect(() => {
-    getAllCategory().then((res) => {
-      console.log("res", res);
-      const success = res?.data?.success
-      if(success){
-        setCategories(res?.data?.category)
-      }
-    });
-  }, []);
+  const [products, setProducts] = useState([]);
+  const [categories,setCategories] = useState([])
+  const [suppliers,setSuppliers] = useState([])
 
   const columns = [
     {
@@ -31,17 +25,31 @@ const CategoryListScreen = () => {
       title: "Description",
       dataIndex: "description",
       key: "description",
-      // render: (text) => {
-      //   if (text?.length > 45) {
-      //     return `${text.substring(0, 45)}...`;
-      //   }
-      //   return text;
-      // },
-      render: (text) => (
-        <Tooltip title={text}>
-          {text.length > 45 ? `${text.substring(0, 45)}...` : text}
-        </Tooltip>
-      ),
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+    },
+    {
+      title: "Quantity",
+      dataIndex: "quantity",
+      key: "quantity",
+    },
+    {
+      title: "Category",
+      dataIndex: "categoryID",
+      key: "categoryID",
+      render: (text) =>
+        categories.find((category) => category._id === text)?.name || "Unknown",
+    },
+    {
+      title: "Supplier",
+      dataIndex: "supplierID",
+      key: "supplierID",
+      render: (text) =>
+        suppliers.find((supplier) => supplier._id === text)?.supplierName ||
+        "Unknown",
     },
     {
       title: "Created At",
@@ -50,6 +58,29 @@ const CategoryListScreen = () => {
       render: (text) => moment(text).format("YYYY-MM-DD HH:mm:ss"),
     },
   ];
+
+  useEffect(() => {
+    getAllSupplier().then((res) => {
+      const success = res?.data;
+      if (success) {
+        setSuppliers(res?.data?.supplier);
+      }
+    });
+    getAllCategory().then((res) => {
+      const success = res?.data;
+      if (success) {
+        setCategories(res?.data?.category);
+      }
+    });
+
+    getProducts().then((res) => {
+      console.log("product", res);
+      const success = res?.data?.success;
+      if (success) {
+        setProducts(res?.data?.products);
+      }
+    });
+  }, []);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -85,12 +116,12 @@ const CategoryListScreen = () => {
             {
               title: (
                 <div className="flex hover:text-gray-600 justify-center items-center gap-1">
-                  <span>Category</span>
+                  <span>Product</span>
                 </div>
               ),
             },
             {
-              title: "Category List",
+              title: "Product List",
             },
           ]}
         />
@@ -102,7 +133,7 @@ const CategoryListScreen = () => {
           </div>
           <div className="w-full flex justify-center ">
             <Table
-              dataSource={categories}
+              dataSource={products}
               columns={columns}
               className="w-full mt-5 mr-5 border border-t-4 rounded"
             />
@@ -162,4 +193,4 @@ const CategoryListScreen = () => {
   );
 };
 
-export default CategoryListScreen;
+export default ProductListScreen;

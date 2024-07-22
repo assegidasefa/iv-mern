@@ -3,6 +3,7 @@ import productRouter from './productRoutes.js'
 import userRouter from "./userRoutes.js"
 import categoryRouter from './categoryRoutes.js'
 import supplierRouter from './supplierRoute.js'
+import imageRouter from './imageRoutes.js'
 const app = express.Router()
 
 
@@ -10,6 +11,7 @@ const app = express.Router()
 app.use('/products', productRouter)
 app.use('/users', userRouter)
 app.use('/categories', categoryRouter)
+app.use('/image', imageRouter)
 app.use('/supplier', supplierRouter)
 
 

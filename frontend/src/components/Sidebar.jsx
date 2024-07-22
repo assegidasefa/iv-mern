@@ -31,7 +31,7 @@ const Sidebar = () => {
         {
           name: "View Products",
           icon: LuView,
-          link: "/products/view-product",
+          link: "/products/product-list",
         },
         {
           name: "Product Categories",

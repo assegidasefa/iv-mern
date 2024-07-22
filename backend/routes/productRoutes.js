@@ -4,6 +4,9 @@ import { getProducts, addProduct } from '../controllers/productController.js';
 import {upload} from '../middleware/uploadMiddleware.js';
 
 
-productRouter.route('/').get(getProducts).post(upload.single('image'), addProduct);
+productRouter.post("/",addProduct)
+productRouter.get("/",getProducts)
+
+
 
 export default productRouter;
