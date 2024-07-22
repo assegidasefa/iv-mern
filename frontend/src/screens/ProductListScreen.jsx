@@ -8,12 +8,13 @@ import { addCategory, getAllCategory } from "../service/categoryService";
 import { getProducts } from "../service/productService";
 import { getAllSupplier } from "../service/supplierService";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const ProductListScreen = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const [categories,setCategories] = useState([])
   const [suppliers,setSuppliers] = useState([])
+  const navigate = useNavigate()
 
   const columns = [
     {
@@ -82,22 +83,12 @@ const ProductListScreen = () => {
     });
   }, []);
 
-  const showModal = () => {
-    setIsModalOpen(true);
+  const addProduct = () => {
+    navigate("/products/add-product")
   };
 
-  const handleOk = (values) => {
-    console.log("Form values:", values);
-    addCategory(values).then((res) => {
-      console.log("response", res);
-    });
-    setIsModalOpen(false);
-    // You can also add your form submission logic here, e.g., sending data to an API
-  };
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -127,8 +118,8 @@ const ProductListScreen = () => {
         />
         <div className="flex flex-col w-full">
           <div className="flex justify-end mr-20">
-            <Button className="bg-black text-white" onClick={showModal}>
-              Add Category
+            <Button className="bg-black text-white" onClick={addProduct}>
+              Add Product
             </Button>
           </div>
           <div className="w-full flex justify-center ">
@@ -139,55 +130,7 @@ const ProductListScreen = () => {
             />
           </div>
         </div>
-        {isModalOpen && (
-          <Modal
-            title="Add Category"
-            open={isModalOpen}
-            onCancel={handleCancel}
-            footer={null}
-          >
-            <Form
-              name="basic"
-              onFinish={handleOk}
-              layout="vertical"
-              className="w-full"
-              onFinishFailed={onFinishFailed}
-              autoComplete="off"
-            >
-              <Form.Item
-                label="Name"
-                name="name"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your name!",
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Description"
-                name="description"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your description!",
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item className="flex justify-end">
-                <Button type="primary" htmlType="submit">
-                  Add Category
-                </Button>
-              </Form.Item>
-            </Form>
-          </Modal>
-        )}
+        
       </div>
     </section>
   );
