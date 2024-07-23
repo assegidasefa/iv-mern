@@ -1,5 +1,5 @@
 import Product from "../models/Product.js";
-import { getProduct } from "../service/productService.js";
+import { deleteProductById, getProduct } from "../service/productService.js";
 
 export const getProducts = async (req, res) => {
   try {
@@ -35,6 +35,22 @@ export const addProduct = async (req, res) => {
     res.status(500).json({ success: false, error: "Server Error" });
   }
 };
+
+export const deleteProductUsingId = (req, res) => {
+  const id = req.params.id
+  deleteProductByIdHandler(id).then((resp) => {
+      res.status(200).send(resp)
+  }).catch((err) => {
+      console.log(err)
+      res.status(200).send({ success: false, error: "Something went worng" })
+  })
+}
+
+
+const deleteProductByIdHandler = async (id) => {
+  await deleteProductById(id)
+  return { success: true, message: "Delete Successfully!!!" }
+}
 
 // module.exports = {
 //   getProducts,

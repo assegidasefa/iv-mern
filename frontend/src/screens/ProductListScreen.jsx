@@ -5,16 +5,27 @@ import { HomeOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Modal, Table } from "antd";
 import { Breadcrumb } from "antd";
 import { addCategory, getAllCategory } from "../service/categoryService";
-import { getProducts } from "../service/productService";
+import { deleteProduct, getProducts } from "../service/productService";
 import { getAllSupplier } from "../service/supplierService";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 
 const ProductListScreen = () => {
   const [products, setProducts] = useState([]);
-  const [categories,setCategories] = useState([])
-  const [suppliers,setSuppliers] = useState([])
-  const navigate = useNavigate()
+  const [categories, setCategories] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+  const navigate = useNavigate();
+
+  const deleteProductHandler = (id) => {
+    deleteProduct(id).then((res) => {
+      console.log("response", res);
+      const success = res?.data?.success;
+      if (success) {
+        setRefresh(!refresh);
+      }
+    });
+  };
 
   const columns = [
     {
@@ -58,6 +69,16 @@ const ProductListScreen = () => {
       key: "createdAt",
       render: (text) => moment(text).format("YYYY-MM-DD HH:mm:ss"),
     },
+    {
+      title: "Action",
+      // dataIndex: "createdAt",
+      key: "Action",
+      render: (_, record) => (
+        <Button onClick={() => deleteProductHandler(record?._id)}>
+          Romove
+        </Button>
+      ),
+    },
   ];
 
   useEffect(() => {
@@ -81,14 +102,11 @@ const ProductListScreen = () => {
         setProducts(res?.data?.products);
       }
     });
-  }, []);
+  }, [refresh]);
 
   const addProduct = () => {
-    navigate("/products/add-product")
+    navigate("/products/add-product");
   };
-
-
-  
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -130,7 +148,6 @@ const ProductListScreen = () => {
             />
           </div>
         </div>
-        
       </div>
     </section>
   );
