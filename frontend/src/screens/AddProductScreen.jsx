@@ -18,12 +18,15 @@ import { Breadcrumb } from "antd";
 import { getAllSupplier } from "../service/supplierService";
 import { getAllCategory } from "../service/categoryService";
 import { useForm } from "antd/es/form/Form";
+import { addProducts } from "../service/productService";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
 const AddProductScreen = () => {
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
+  const navigate = useNavigate()
 
   const [form] = Form.useForm();
 
@@ -70,14 +73,15 @@ const AddProductScreen = () => {
 
   const onFinish = async (values) => {
     try {
-      const imageFile =
-        form.getFieldValue("image")?.fileList?.[0]?.originFileObj;
+      console.log("rr", form.getFieldValue("image"));
+      const imageFile = form.getFieldValue("image")[0].originFileObj;
+
       if (!imageFile) {
         throw new Error("No image file selected");
       }
 
       const image = await handleImageUpload(imageFile);
-      console.log("image",image)
+      console.log("image", image);
       if (image) {
         const productData = {
           ...values,
@@ -85,8 +89,15 @@ const AddProductScreen = () => {
         };
 
         // Submit the product data along with the image URL
-        await axios.post("/api/products", productData);
-        message.success("Product added successfully");
+        const response = await addProducts(productData);
+        console.log("respones add p ", response);
+        const success = response?.data?.success;
+        if (success) {
+          message.success(response?.data?.message);
+          navigate("/products/product-list")
+        } else {
+          message.error(response?.data?.error);
+        }
       }
     } catch (error) {
       message.error("Product addition failed");
