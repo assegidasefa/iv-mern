@@ -1,5 +1,5 @@
 import validator from "validator";
-import { createCategory, getAllCategory, getCategoryByName } from "../service/categoryService.js";
+import { createCategory, deleteCategoryById, getAllCategory, getCategoryByName } from "../service/categoryService.js";
 
 
 export const createNewCategory = (req, res) => {
@@ -22,6 +22,22 @@ export const getCategory = (req,res)=>{
     res.status(200).send({success:false,error:"Something went wrong"})
   })
 }  
+export const deleteCategoryUsingId = (req, res) => {
+  const id = req.params.id
+  deleteCategoryByIdHandler(id).then((resp) => {
+      res.status(200).send(resp)
+  }).catch((err) => {
+      console.log(err)
+      res.status(200).send({ success: false, error: "Something went worng" })
+  })
+}
+
+
+
+const deleteCategoryByIdHandler = async (id) => {
+  await deleteCategoryById(id)
+  return { success: true, message: "Delete Successfully!!!" }
+}
 
 
 const getCategoryHandler = async () => {

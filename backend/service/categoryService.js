@@ -11,3 +11,8 @@ export const createCategory = (body) => {
   export const getAllCategory = () => {
     return Category.find().lean()
   }
+
+  export const deleteCategoryById = (_id) => {
+    return Category.findByIdAndDelete(_id);
+  };
+  

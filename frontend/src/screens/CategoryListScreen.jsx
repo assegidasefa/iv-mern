@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "../axios";
 import Sidebar from "../components/Sidebar";
 import { HomeOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Modal, Table, Tooltip } from "antd";
+import { Button, Form, Input, message, Modal, Table, Tooltip } from "antd";
 import { Breadcrumb } from "antd";
-import { addCategory, getAllCategory } from "../service/categoryService";
+import { addCategory, deleteCategoryById, getAllCategory } from "../service/categoryService";
 import moment from "moment";
 
 const CategoryListScreen = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categories, setCategories] = useState([]);
-
+  const [refresh,setRefresh] = useState(false)
   useEffect(() => {
     getAllCategory().then((res) => {
       console.log("res", res);
@@ -19,11 +19,18 @@ const CategoryListScreen = () => {
         setCategories(res?.data?.category);
       }
     });
-  }, []);
+  }, [refresh]);
 
   const deleteCategoryHandler = (id) => {
     deleteCategoryById(id).then((res)=>{
       console.log("response id",res)
+      const success = res?.data?.success
+      if(success) {
+         message.success(res?.data?.message)
+         setRefresh(!refresh)
+      }else{
+        message.error(res?.data?.error)
+      }
     })
   }
 
@@ -71,6 +78,13 @@ const CategoryListScreen = () => {
     console.log("Form values:", values);
     addCategory(values).then((res) => {
       console.log("response", res);
+      const success = res?.data?.success
+      if(success){
+        message.success(res?.data?.message)
+        setRefresh(!refresh)
+      }else{
+        message.error(res?.data?.error)
+      }
     });
     setIsModalOpen(false);
     // You can also add your form submission logic here, e.g., sending data to an API
