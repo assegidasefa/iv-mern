@@ -15,6 +15,7 @@ const ProductListScreen = () => {
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [pagination, setPagination] = useState({ current: 1, pageSize: 3, total: 0 });
   const navigate = useNavigate();
 
   const deleteProductHandler = (id) => {
@@ -109,14 +110,35 @@ const ProductListScreen = () => {
       }
     });
 
-    getProducts().then((res) => {
-      console.log("product", res);
+    // getProducts().then((res) => {
+    //   console.log("product", res);
+    //   const success = res?.data?.success;
+    //   if (success) {
+    //     setProducts(res?.data?.products);
+    //   }
+    // });
+    fetchProducts(pagination.current, pagination.pageSize);
+
+  }, [refresh,pagination.current, pagination.pageSize]);
+
+  const fetchProducts = (page, pageSize) => {
+    getProducts(page, pageSize).then((res) => {
       const success = res?.data?.success;
+      console.log("pro result",res)
       if (success) {
         setProducts(res?.data?.products);
+        setPagination({ ...pagination, total: res?.data?.total });
       }
     });
-  }, [refresh]);
+  };
+
+  const handleTableChange = (pagination) => {
+    setPagination({
+      ...pagination,
+      current: pagination.current,
+      pageSize: pagination.pageSize,
+    });
+  };
 
   const addProduct = () => {
     navigate("/products/add-product");
@@ -159,6 +181,12 @@ const ProductListScreen = () => {
               dataSource={products}
               columns={columns}
               className="w-full mt-5 mr-5 border border-t-4 rounded"
+              pagination={{
+                current: pagination.current,
+                pageSize: pagination.pageSize,
+                total: pagination.total,
+              }}
+              onChange={handleTableChange}
             />
           </div>
         </div>

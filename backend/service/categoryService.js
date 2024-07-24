@@ -8,8 +8,11 @@ export const createCategory = (body) => {
     return Category.findOne({ name }).lean()
   };
 
+
   export const getAllCategory = () => {
     return Category.find().lean()
+    // return BatchBulkSMS.findAndCountAll({where:{userId}, limit:_pageSize,offset:start,raw:true,  order: [['createdAt', 'DESC']]  ,});
+
   }
 
   export const deleteCategoryById = (_id) => {

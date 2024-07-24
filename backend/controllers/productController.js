@@ -1,11 +1,19 @@
 import Product from "../models/Product.js";
-import { deleteProductById, getProduct } from "../service/productService.js";
+import {
+  countProduct,
+  deleteProductById,
+  getProduct,
+} from "../service/productService.js";
 
 export const getProducts = async (req, res) => {
+  const _page = req?.query?.page || 1;
+  const _pageSize = req?.query?.pageSize || 10;
   try {
-    const products = await getProduct();
-    res.json({ products: products, success: true });
+    const products = await getProduct(_page, _pageSize);
+    const _countProduct = await countProduct();
+    res.json({ products: products, total: _countProduct, success: true });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
@@ -37,20 +45,21 @@ export const addProduct = async (req, res) => {
 };
 
 export const deleteProductUsingId = (req, res) => {
-  const id = req.params.id
-  deleteProductByIdHandler(id).then((resp) => {
-      res.status(200).send(resp)
-  }).catch((err) => {
-      console.log(err)
-      res.status(200).send({ success: false, error: "Something went worng" })
-  })
-}
-
+  const id = req.params.id;
+  deleteProductByIdHandler(id)
+    .then((resp) => {
+      res.status(200).send(resp);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(200).send({ success: false, error: "Something went worng" });
+    });
+};
 
 const deleteProductByIdHandler = async (id) => {
-  await deleteProductById(id)
-  return { success: true, message: "Delete Successfully!!!" }
-}
+  await deleteProductById(id);
+  return { success: true, message: "Delete Successfully!!!" };
+};
 
 // module.exports = {
 //   getProducts,
