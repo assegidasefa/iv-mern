@@ -15,6 +15,7 @@ const ProductListScreen = () => {
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [loading,setLoading] = useState(true)
   const [pagination, setPagination] = useState({ current: 1, pageSize: 3, total: 0 });
   const navigate = useNavigate();
 
@@ -123,11 +124,13 @@ const ProductListScreen = () => {
 
   const fetchProducts = (page, pageSize) => {
     getProducts(page, pageSize).then((res) => {
+      setLoading(true)
       const success = res?.data?.success;
       console.log("pro result",res)
       if (success) {
         setProducts(res?.data?.products);
         setPagination({ ...pagination, total: res?.data?.total });
+        setLoading(false)
       }
     });
   };
@@ -187,6 +190,7 @@ const ProductListScreen = () => {
                 total: pagination.total,
               }}
               onChange={handleTableChange}
+              loading={loading}
             />
           </div>
         </div>
