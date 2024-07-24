@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "../axios";
 import Sidebar from "../components/Sidebar";
 import { HomeOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Modal, Table } from "antd";
+import { Button, Form, Input, message, Modal, Popconfirm, Table } from "antd";
 import { Breadcrumb } from "antd";
 import { addCategory, getAllCategory } from "../service/categoryService";
 import { deleteProduct, getProducts } from "../service/productService";
@@ -23,8 +23,12 @@ const ProductListScreen = () => {
       const success = res?.data?.success;
       if (success) {
         setRefresh(!refresh);
+        message.success(res?.data?.message)
       }
     });
+  };
+  const cancel = (e) => {
+   
   };
 
   const columns = [
@@ -74,9 +78,19 @@ const ProductListScreen = () => {
       // dataIndex: "createdAt",
       key: "Action",
       render: (_, record) => (
-        <Button onClick={() => deleteProductHandler(record?._id)}>
+        <Popconfirm
+          title="Delete the task"
+          description="Are you sure to delete this Product?"
+          onConfirm={()=> deleteProductHandler(record?._id)}
+          onCancel={cancel}
+          okText="Yes"
+          cancelText="No"
+        >
+
+        <Button >
           Romove
         </Button>
+        </Popconfirm>
       ),
     },
   ];

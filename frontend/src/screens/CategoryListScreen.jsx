@@ -2,15 +2,19 @@ import React, { useEffect, useState } from "react";
 import axios from "../axios";
 import Sidebar from "../components/Sidebar";
 import { HomeOutlined } from "@ant-design/icons";
-import { Button, Form, Input, message, Modal, Table, Tooltip } from "antd";
+import { Button, Form, Input, message, Modal, Popconfirm, Table, Tooltip } from "antd";
 import { Breadcrumb } from "antd";
-import { addCategory, deleteCategoryById, getAllCategory } from "../service/categoryService";
+import {
+  addCategory,
+  deleteCategoryById,
+  getAllCategory,
+} from "../service/categoryService";
 import moment from "moment";
 
 const CategoryListScreen = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [refresh,setRefresh] = useState(false)
+  const [refresh, setRefresh] = useState(false);
   useEffect(() => {
     getAllCategory().then((res) => {
       console.log("res", res);
@@ -21,18 +25,26 @@ const CategoryListScreen = () => {
     });
   }, [refresh]);
 
+  const confirm = (e) => {
+    console.log(e);
+    message.success('Click on Yes');
+  };
+  const cancel = (e) => {
+   
+  };
+
   const deleteCategoryHandler = (id) => {
-    deleteCategoryById(id).then((res)=>{
-      console.log("response id",res)
-      const success = res?.data?.success
-      if(success) {
-         message.success(res?.data?.message)
-         setRefresh(!refresh)
-      }else{
-        message.error(res?.data?.error)
+    deleteCategoryById(id).then((res) => {
+      console.log("response id", res);
+      const success = res?.data?.success;
+      if (success) {
+        message.success(res?.data?.message);
+        setRefresh(!refresh);
+      } else {
+        message.error(res?.data?.error);
       }
-    })
-  }
+    });
+  };
 
   const columns = [
     {
@@ -66,7 +78,23 @@ const CategoryListScreen = () => {
       title: "Action",
       // dataIndex: "createdAt",
       key: "createdAt",
-      render: (record) => <Button onClick={()=>deleteCategoryHandler(record?._id)}>Remove</Button>,
+      render: (record) => (
+        <Popconfirm
+          title="Delete the task"
+          description="Are you sure to delete this Category?"
+          onConfirm={()=>deleteCategoryHandler(record?._id)}
+          onCancel={cancel}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button 
+          // onClick={() => deleteCategoryHandler(record?._id)}
+          >
+            Remove
+          </Button>
+          ,
+        </Popconfirm>
+      ),
     },
   ];
 
@@ -78,12 +106,12 @@ const CategoryListScreen = () => {
     console.log("Form values:", values);
     addCategory(values).then((res) => {
       console.log("response", res);
-      const success = res?.data?.success
-      if(success){
-        message.success(res?.data?.message)
-        setRefresh(!refresh)
-      }else{
-        message.error(res?.data?.error)
+      const success = res?.data?.success;
+      if (success) {
+        message.success(res?.data?.message);
+        setRefresh(!refresh);
+      } else {
+        message.error(res?.data?.error);
       }
     });
     setIsModalOpen(false);
