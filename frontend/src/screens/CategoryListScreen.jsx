@@ -9,17 +9,23 @@ import moment from "moment";
 
 const CategoryListScreen = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [categories,setCategories]  = useState([])
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     getAllCategory().then((res) => {
       console.log("res", res);
-      const success = res?.data?.success
-      if(success){
-        setCategories(res?.data?.category)
+      const success = res?.data?.success;
+      if (success) {
+        setCategories(res?.data?.category);
       }
     });
   }, []);
+
+  const deleteCategoryHandler = (id) => {
+    deleteCategoryById(id).then((res)=>{
+      console.log("response id",res)
+    })
+  }
 
   const columns = [
     {
@@ -48,6 +54,12 @@ const CategoryListScreen = () => {
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text) => moment(text).format("YYYY-MM-DD HH:mm:ss"),
+    },
+    {
+      title: "Action",
+      // dataIndex: "createdAt",
+      key: "createdAt",
+      render: (record) => <Button onClick={()=>deleteCategoryHandler(record?._id)}>Remove</Button>,
     },
   ];
 
