@@ -20,8 +20,8 @@ const App = () => {
         <Route path="/products/categories-list" element={<CategoryListScreen />} exact />
         <Route path="/suppliers/add-suppliers" element={<AddSupplierScreen />} exact />
         <Route path="/login" element={<LoginScreen />} exact />
-        <Route path="/signup" element={<SignUpScreen />} exact />
         {/* <Route path="/add-product" element={<AddProductScreen />} /> */}
+        <Route path="/signup" element={<SignUpScreen />} exact />
       </Routes>
     </Router>
   );
