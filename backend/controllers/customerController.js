@@ -1,5 +1,5 @@
 import Customer from "../models/Customer.js";
-import { countCustomers, getCustomer } from "../service/customerService.js";
+import { countCustomers, deleteCustomerById, getCustomer } from "../service/customerService.js";
 import {
   countProduct,
   deleteProductById,
@@ -38,9 +38,9 @@ export const addCustomer = async (req, res) => {
   }
 };
 
-export const deleteProductUsingId = (req, res) => {
+export const deleteCustomer = (req, res) => {
   const id = req.params.id;
-  deleteProductByIdHandler(id)
+  deleteCustomerByIdHandler(id)
     .then((resp) => {
       res.status(200).send(resp);
     })
@@ -50,8 +50,8 @@ export const deleteProductUsingId = (req, res) => {
     });
 };
 
-const deleteProductByIdHandler = async (id) => {
-  await deleteProductById(id);
+const deleteCustomerByIdHandler = async (id) => {
+  await deleteCustomerById(id);
   return { success: true, message: "Delete Successfully!!!" };
 };
 

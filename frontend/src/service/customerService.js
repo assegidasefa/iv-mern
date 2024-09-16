@@ -10,6 +10,6 @@ export const addCustomer = (customerData) => {
   return axios.post(API_URL + "/customer", customerData);
 };
 
-export const deleteProduct = (id) => {
-  return axios.delete(API_URL + `/products/${id}`);
+export const deleteCustomer = (id) => {
+  return axios.delete(API_URL + `/customer/${id}`);
 };

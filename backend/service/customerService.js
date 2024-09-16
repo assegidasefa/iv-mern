@@ -25,6 +25,6 @@ export const countCustomers = () => {
   return Customer.countDocuments().lean()
 }
 
-export const deleteProductById = (_id) => {
-  return Product.findByIdAndDelete(_id);
+export const deleteCustomerById = (_id) => {
+  return Customer.findByIdAndDelete(_id);
 };

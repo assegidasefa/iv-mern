@@ -9,7 +9,7 @@ import { deleteProduct, getProducts } from "../service/productService";
 import { getAllSupplier } from "../service/supplierService";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { getCutomers } from "../service/customerService";
+import { deleteCustomer, getCutomers } from "../service/customerService";
 
 const CustomerListScreen = () => {
   const [customers, setCustomers] = useState([]);
@@ -20,8 +20,8 @@ const CustomerListScreen = () => {
   const [pagination, setPagination] = useState({ current: 1, pageSize: 3, total: 0 });
   const navigate = useNavigate();
 
-  const deleteProductHandler = (id) => {
-    deleteProduct(id).then((res) => {
+  const deleteCustomerHandler = (id) => {
+    deleteCustomer(id).then((res) => {
       console.log("response", res);
       const success = res?.data?.success;
       if (success) {
@@ -78,8 +78,8 @@ const CustomerListScreen = () => {
       render: (_, record) => (
         <Popconfirm
           title="Delete the task"
-          description="Are you sure to delete this Product?"
-          onConfirm={()=> deleteProductHandler(record?._id)}
+          description="Are you sure to delete this Customer?"
+          onConfirm={()=> deleteCustomerHandler(record?._id)}
           onCancel={cancel}
           okText="Yes"
           cancelText="No"
