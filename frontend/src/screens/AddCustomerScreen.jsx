@@ -43,7 +43,7 @@ const AddCustomerScreen = () => {
         const success = response?.data?.success;
         if (success) {
           message.success(response?.data?.message);
-          navigate("/customer/customer-list")
+          navigate("/customers/view-customers")
         } else {
           message.error(response?.data?.error);
         }

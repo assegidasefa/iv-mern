@@ -1,17 +1,18 @@
 import Customer from "../models/Customer.js";
+import { countCustomers, getCustomer } from "../service/customerService.js";
 import {
   countProduct,
   deleteProductById,
   getProduct,
 } from "../service/productService.js";
 
-export const getProducts = async (req, res) => {
+export const getCustomers = async (req, res) => {
   const _page = req?.query?.page || 1;
   const _pageSize = req?.query?.pageSize || 10;
   try {
-    const products = await getProduct(_page, _pageSize);
-    const _countProduct = await countProduct();
-    res.json({ products: products, total: _countProduct, success: true });
+    const customers = await getCustomer(_page, _pageSize);
+    const _countCustomers = await countCustomers();
+    res.json({ customers: customers, total: _countCustomers, success: true });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Server Error" });

@@ -10,6 +10,7 @@ import AddSupplierScreen from "./screens/AddSupplierScreen";
 import ProductListScreen from "./screens/ProductListScreen";
 import AddOrderScreen from "./screens/AddOrderScreen";
 import AddCustomerScreen from "./screens/AddCustomerScreen";
+import CustomerListScreen from "./screens/CustomerListScreen";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/suppliers/add-suppliers" element={<AddSupplierScreen />} exact />
         <Route path="/orders/add-order" element={<AddOrderScreen />} exact />
         <Route path="/customers/add-customers" element={<AddCustomerScreen />} exact />
+        <Route path="/customers/view-customers" element={<CustomerListScreen />} exact />
         <Route path="/login" element={<LoginScreen />} exact />
         {/* <Route path="/add-product" element={<AddProductScreen />} /> */}
         <Route path="/signup" element={<SignUpScreen />} exact />
