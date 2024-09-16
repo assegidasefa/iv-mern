@@ -8,6 +8,8 @@ import SignUpScreen from "./screens/SignUpScreen";
 import CategoryListScreen from "./screens/CategoryListScreen";
 import AddSupplierScreen from "./screens/AddSupplierScreen";
 import ProductListScreen from "./screens/ProductListScreen";
+import AddOrderScreen from "./screens/AddOrderScreen";
+import AddCustomerScreen from "./screens/AddCustomerScreen";
 
 const App = () => {
   return (
@@ -19,6 +21,8 @@ const App = () => {
         <Route path="/products/product-list" element={<ProductListScreen />} exact />
         <Route path="/products/categories-list" element={<CategoryListScreen />} exact />
         <Route path="/suppliers/add-suppliers" element={<AddSupplierScreen />} exact />
+        <Route path="/orders/add-order" element={<AddOrderScreen />} exact />
+        <Route path="/customers/add-customers" element={<AddCustomerScreen />} exact />
         <Route path="/login" element={<LoginScreen />} exact />
         <Route path="/signup" element={<SignUpScreen />} exact />
         {/* <Route path="/add-product" element={<AddProductScreen />} /> */}
