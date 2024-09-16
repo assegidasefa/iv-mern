@@ -24,8 +24,8 @@ const App = () => {
         <Route path="/orders/add-order" element={<AddOrderScreen />} exact />
         <Route path="/customers/add-customers" element={<AddCustomerScreen />} exact />
         <Route path="/login" element={<LoginScreen />} exact />
-        <Route path="/signup" element={<SignUpScreen />} exact />
         {/* <Route path="/add-product" element={<AddProductScreen />} /> */}
+        <Route path="/signup" element={<SignUpScreen />} exact />
       </Routes>
     </Router>
   );
